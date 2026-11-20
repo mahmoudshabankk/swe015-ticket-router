@@ -1,0 +1,9 @@
+{
+ "tf-idf + LogReg": 0.04,
+ "FFN on avg. GloVe": 0.16,
+ "BERT-base (teacher)": 0.18,
+ "BERT-base INT8 (ONNX)": 0.14,
+ "BERT-small distilled": 0.22,
+ "BERT-small distilled INT8 (PyTorch)": 0.34,
+ "BERT-small distilled INT8 (ONNX)": 0.18
+}

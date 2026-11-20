@@ -1,0 +1,14 @@
+torch>=2.4
+transformers>=4.44
+datasets>=3.0
+scikit-learn>=1.5
+gensim>=4.3.3
+gradio>=5.0
+pandas>=2.2
+numpy>=1.26
+huggingface_hub>=0.24
+tabulate>=0.9
+matplotlib>=3.8
+onnx>=1.16
+onnxruntime>=1.18
+onnxscript>=0.1

@@ -1,0 +1,10 @@
+models/
+data/*.csv
+__pycache__/
+.venv/
+*.pt
+*.safetensors
+*.pkl
+*.onnx
+presentation/slides.html
+*.zip

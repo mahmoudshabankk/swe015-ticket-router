@@ -1,0 +1,1 @@
+AMD Ryzen 7 3700X 8-Core Processor, 16 logical cores | Windows 10 | torch 2.15.0+cpu, onnxruntime 1.32.0 | 4 inference threads | CPU only

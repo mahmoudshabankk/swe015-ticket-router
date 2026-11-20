@@ -1,0 +1,22 @@
+[
+ {
+  "text": "how would they say butter in zambia",
+  "true": "translate",
+  "pred": "ingredient_substitution"
+ },
+ {
+  "text": "english to spanish for dog",
+  "true": "translate",
+  "pred": "change_language"
+ },
+ {
+  "text": "can you dim the brightness of my screen",
+  "true": "oos",
+  "pred": "smart_home"
+ },
+ {
+  "text": "what's the word for trees in norway",
+  "true": "translate",
+  "pred": "oos"
+ }
+]

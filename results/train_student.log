@@ -1,0 +1,80 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/71 [00:00<?, ?it/s]Loading weights: 100%|██████████| 71/71 [00:00<00:00, 23647.71it/s]
+[transformers] [1mBertForSequenceClassification LOAD REPORT[0m from: google/bert_uncased_L-4_H-512_A-8
+Key                                        | Status     | 
+-------------------------------------------+------------+-
+cls.seq_relationship.bias                  | UNEXPECTED | 
+cls.predictions.decoder.bias               | UNEXPECTED | 
+cls.predictions.transform.dense.bias       | UNEXPECTED | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED | 
+cls.predictions.bias                       | UNEXPECTED | 
+cls.predictions.transform.dense.weight     | UNEXPECTED | 
+cls.seq_relationship.weight                | UNEXPECTED | 
+cls.predictions.decoder.weight             | UNEXPECTED | 
+classifier.bias                            | MISSING    | 
+classifier.weight                          | MISSING    | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights:  31%|███▏      | 63/201 [00:00<00:00, 602.50it/s]Loading weights:  62%|██████▏   | 124/201 [00:00<00:00, 604.06it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 933.29it/s]
+teacher logits computed in 159s
+ep0 step0 loss 3.066 (0s)
+ep0 step100 loss 2.923 (34s)
+ep0 step200 loss 2.402 (68s)
+ep0 step300 loss 1.836 (103s)
+ep0 step400 loss 1.255 (137s)
+epoch 0: train loss 2.1527 val acc 0.7855 time 168s
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.51it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.51it/s]
+ep1 step0 loss 0.992 (0s)
+ep1 step100 loss 0.746 (35s)
+ep1 step200 loss 0.473 (68s)
+ep1 step300 loss 0.361 (102s)
+ep1 step400 loss 0.323 (136s)
+epoch 1: train loss 0.5229 val acc 0.9171 time 171s
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.40it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.40it/s]
+ep2 step0 loss 0.266 (0s)
+ep2 step100 loss 0.219 (35s)
+ep2 step200 loss 0.194 (70s)
+ep2 step300 loss 0.230 (103s)
+ep2 step400 loss 0.192 (137s)
+epoch 2: train loss 0.2256 val acc 0.9335 time 169s
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.68it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.68it/s]
+ep3 step0 loss 0.163 (0s)
+ep3 step100 loss 0.128 (35s)
+ep3 step200 loss 0.127 (69s)
+ep3 step300 loss 0.161 (103s)
+ep3 step400 loss 0.143 (137s)
+epoch 3: train loss 0.1545 val acc 0.9394 time 168s
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.27it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.27it/s]
+ep4 step0 loss 0.132 (0s)
+ep4 step100 loss 0.120 (34s)
+ep4 step200 loss 0.111 (68s)
+ep4 step300 loss 0.146 (102s)
+ep4 step400 loss 0.123 (136s)
+epoch 4: train loss 0.1273 val acc 0.9381 time 168s
+ep5 step0 loss 0.111 (0s)
+ep5 step100 loss 0.115 (34s)
+ep5 step200 loss 0.140 (68s)
+ep5 step300 loss 0.103 (102s)
+ep5 step400 loss 0.127 (137s)
+epoch 5: train loss 0.1134 val acc 0.9381 time 169s
+ep6 step0 loss 0.101 (0s)
+ep6 step100 loss 0.114 (34s)
+ep6 step200 loss 0.103 (69s)
+ep6 step300 loss 0.106 (103s)
+ep6 step400 loss 0.100 (137s)
+epoch 6: train loss 0.1060 val acc 0.9413 time 168s
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  7.32it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  7.32it/s]
+ep7 step0 loss 0.109 (0s)
+ep7 step100 loss 0.094 (35s)
+ep7 step200 loss 0.101 (69s)
+ep7 step300 loss 0.098 (103s)
+ep7 step400 loss 0.089 (137s)
+epoch 7: train loss 0.1020 val acc 0.9403 time 168s
+best val acc 0.9412903225806452
+Loading weights:   0%|          | 0/73 [00:00<?, ?it/s]Loading weights: 100%|██████████| 73/73 [00:00<00:00, 2279.00it/s]
+saved C:\Users\Mahmoud\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\32372e74-147d-4333-8fbd-a7eb4bd0fe91\2afdc01c-2f08-48f1-ba32-6f0ec7f27328\scratch-2026-11-20-8c7065\ticket-router\models\bert-small-student-int8.pt 29.2 MB
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights:  16%|█▋        | 33/201 [00:00<00:00, 317.12it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 985.56it/s]
+saved C:\Users\Mahmoud\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\32372e74-147d-4333-8fbd-a7eb4bd0fe91\2afdc01c-2f08-48f1-ba32-6f0ec7f27328\scratch-2026-11-20-8c7065\ticket-router\models\bert-base-teacher-int8.pt 110.4 MB

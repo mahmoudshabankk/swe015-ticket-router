@@ -1,0 +1,19 @@
+# 2-minute demo video: narration script
+
+Record the screen with **Win + G** (Xbox Game Bar), OBS or the Windows **Snipping Tool**, which can record
+video. Turn the **microphone on**. Start `python app.py` before you hit record, and keep
+`presentation/slides.pdf` open in a second window.
+
+| Time | On screen | Say (English) |
+|---|---|---|
+| 0:00–0:15 | Title slide | "Support centers get thousands of messages a day. My app reads each message and sends it to the right team instantly. Unknown requests go to a human agent." |
+| 0:15–0:35 | App, type: `how do i transfer money to my sister's account` | "I type a new message. It is normalized and classified by the quantized, distilled BERT. It goes to the Banking team with high confidence. Below, all four models are compared side by side, with their latency." |
+| 0:35–0:55 | Type: `my credt card got declnied at the store, model DW-6534` | "A harder case with typos and a product code. The regex extracts the model code DW-6534. Edit-distance correction fixes 'credt' and 'declnied', and the ticket goes to Card Services." |
+| 0:55–1:10 | Type: `how many moons does jupiter have`, then `my dishwasher DW-6534 is not draining water` | "An out-of-scope question goes to a human agent. And here's a difficult case: there is no appliance-repair intent in the training data, so the model is unsure and also hands it to a human instead of guessing a wrong team." |
+| 1:10–1:15 | Type: `hellooo` | "Small talk gets an ELIZA-style rule reply." |
+| 1:15–1:30 | Architecture slide | "The architecture: regex normalization, the spelling corrector, ELIZA rules, then the INT8 BERT-small. The tf-idf baseline, the GloVe feed-forward network and the BERT-base teacher run for comparison. Everything runs on CPU." |
+| 1:30–1:45 | Results table slide | "On the same 5,500-message test set, BERT-base is the most accurate. The distilled INT8 model keeps almost the same accuracy, and it is much smaller and faster. *(read the two numbers from the table)*" |
+| 1:45–2:00 | Conclusion slide | "Distillation plus quantization gives the best trade-off for a CPU-only router. Out-of-scope detection is still the hardest part. Thank you." |
+
+Upload to YouTube as **Unlisted** (or Google Drive with "Anyone with the link"). Open the link in a private
+window to check it, then put it in `presentation/info.json` and rebuild the slides.
