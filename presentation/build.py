@@ -45,6 +45,9 @@ fail_rows = "".join(f"<tr><td>&ldquo;{f['text']}&rdquo;</td><td>{f['true']}</td>
 stat_rows = "".join(f"<tr><td>{k}</td><td>{v['n']:,}</td><td>{v['n'] - v['oos']:,}</td><td>{v['oos']:,}</td></tr>"
                     for k, v in stats.items())
 
+# the video link row is shown once the real link is in info.json (the video itself is recorded from these slides)
+VIDEO_ROW = ("" if "YOUR_VIDEO" in info["video_url"] else
+             f"<tr><td>Demo video</td><td><a href=\"{info['video_url']}\">{info['video_url']}</a></td></tr>")
 speed = bert.latency_ms / sq.latency_ms
 shrink = bert.size_mb / sq.size_mb
 
@@ -57,7 +60,7 @@ SLIDES = [
     <table class="meta"><tr><td>Name</td><td>{info['name']}</td></tr><tr><td>Student ID</td><td>{info['student_id']}</td></tr>
     <tr><td>Use case</td><td>2 · Customer Support Ticket Router</td></tr>
     <tr><td>Repository</td><td><a href="{info['repo_url']}">{info['repo_url']}</a></td></tr>
-    <tr><td>Demo video</td><td><a href="{info['video_url']}">{info['video_url']}</a></td></tr></table></div>""",
+    {VIDEO_ROW}</table></div>""",
     # 2 intro
     """<div class="sec">Introduction</div><h2>The problem and what success looks like</h2>
     <div class="cols"><div><h3>Problem</h3><p>A support center gets thousands of messages a day. Each one has to reach
@@ -160,8 +163,10 @@ SLIDES = [
     # 11 AI usage
     """<div class="sec">Conclusion</div><h2>AI usage statement</h2>
     <table><tr><th>Tool</th><th>Used for</th></tr>
-    <tr><td>Claude (Anthropic) via Claude Code</td><td>Choosing the use case and the design; writing and debugging the Python code (preprocessing, training, quantization, evaluation, Gradio app); generating the architecture diagram and these slides.</td></tr>
-    <tr><td>My own work</td><td>Running all training and evaluation on my machine; checking the code and results; recording and narrating the demo video. I can explain every component in the architecture diagram.</td></tr></table>
+    <tr><td>Claude (Anthropic) via Claude Code</td><td>Choosing the use case and the design; writing and debugging the Python code (preprocessing, training, quantization, evaluation, Gradio app); generating the architecture diagram and these slides; writing the video narration script and the script that records the demo video.</td></tr>
+    <tr><td>Microsoft neural text-to-speech (edge-tts)</td><td>The voice of the video narration (AI-generated voice reading my script).</td></tr>
+    <tr><td>Playwright + ffmpeg</td><td>Recording the live application in the browser (new messages typed during the recording) and assembling the video.</td></tr>
+    <tr><td>My own work</td><td>Running all training and evaluation on my machine; checking the code and results; reviewing the demo video before submitting. I can explain every component in the architecture diagram.</td></tr></table>
     <p>All numbers in this presentation come from my own runs (<code>src/evaluate.py</code> &rarr; <code>results/results.csv</code>). No number was taken from a paper, a model card or an AI answer.</p>
     <h3>Sources</h3><ul><li>CLINC150: Larson et al., EMNLP-IJCNLP 2019 (CC BY 3.0)</li><li>GloVe: Pennington, Socher, Manning, EMNLP 2014 (via gensim-data)</li>
     <li>BERT: Devlin et al., NAACL 2019; small BERT: Turc et al., 2019 (google/bert_uncased_L-4_H-512_A-8)</li><li>Knowledge distillation: Hinton, Vinyals, Dean, 2015</li></ul>""",

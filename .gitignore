@@ -8,3 +8,5 @@ __pycache__/
 *.onnx
 presentation/slides.html
 *.zip
+presentation/video_build/
+presentation/demo.mp4
