@@ -94,7 +94,8 @@ with gr.Blocks(title="Support Ticket Router") as demo:
     with gr.Row():
         out = gr.Markdown()
         pre = gr.Markdown()
-    table = gr.Dataframe(label="All models side by side", wrap=True)
+    table = gr.Dataframe(label="All models side by side", wrap=True,
+                         headers=["model", "precision", "intent", "confidence", "routed to", "latency (ms)"])
     btn.click(handle, inp, [out, pre, table])
     inp.submit(handle, inp, [out, pre, table])
 
