@@ -47,7 +47,10 @@ stat_rows = "".join(f"<tr><td>{k}</td><td>{v['n']:,}</td><td>{v['n'] - v['oos']:
 
 # the video link row is shown once the real link is in info.json (the video itself is recorded from these slides)
 VIDEO_ROW = ("" if "YOUR_VIDEO" in info["video_url"] else
-             f"<tr><td>Demo video</td><td><a href=\"{info['video_url']}\">{info['video_url']}</a></td></tr>")
+             f"<tr><td>Demo video</td><td><a href=\"{info['video_url']}\">{info['video_url']}</a> (YouTube)</td></tr>")
+if info.get("drive_url"):
+    VIDEO_ROW += (f"<tr><td>Video (Drive)</td><td><a href=\"{info['drive_url']}\">{info['drive_url']}</a>"
+                  f"</td></tr>")
 speed = bert.latency_ms / sq.latency_ms
 shrink = bert.size_mb / sq.size_mb
 
