@@ -6,6 +6,7 @@ of the running app (new messages typed live) and of the slides, assembled with f
     python presentation/make_video.py   # -> presentation/demo.mp4
 """
 import asyncio
+import shutil
 import subprocess
 import time
 from pathlib import Path
@@ -23,6 +24,8 @@ SLIDES = (HERE / "slides.html").as_uri()
 VOICE, RATE = "en-US-AndrewNeural", "+4%"
 FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
 W, H = 1280, 720
+SCALE = 1.5          # -> 1920x1080 output
+OW, OH = int(W * SCALE), int(H * SCALE)
 
 # (narration, actions) - actions run while the narration of that segment plays
 SEGMENTS = [
@@ -95,47 +98,84 @@ def run(page, action):
 
 
 def record(durations):
-    starts = []
+    """Drives the browser and captures lossless-quality frames with the Chrome DevTools screencast
+    (1920x1080: 1280x720 CSS viewport at device scale factor 1.5)."""
+    import base64
+    frames_dir = OUT / "frames"
+    shutil.rmtree(frames_dir, ignore_errors=True)
+    frames_dir.mkdir()
+    frames, starts = [], []
     with sync_playwright() as p:
         browser = p.chromium.launch()
-        ctx = browser.new_context(viewport={"width": W, "height": H}, record_video_dir=str(OUT),
-                                  record_video_size={"width": W, "height": H}, color_scheme="dark")
+        ctx = browser.new_context(viewport={"width": W, "height": H}, device_scale_factor=SCALE,
+                                  color_scheme="dark")
         page = ctx.new_page()
-        t0 = time.monotonic()
+        cdp = ctx.new_cdp_session(page)
+
+        def on_frame(ev):
+            f = frames_dir / f"{len(frames):05d}.jpg"
+            f.write_bytes(base64.b64decode(ev["data"]))
+            frames.append((ev["metadata"]["timestamp"], f))
+            cdp.send("Page.screencastFrameAck", {"sessionId": ev["sessionId"]})
+
+        cdp.on("Page.screencastFrame", on_frame)
+        page.goto(SLIDES)
+        page.wait_for_timeout(300)
+        cdp.send("Page.startScreencast", {"format": "jpeg", "quality": 95, "maxWidth": OW,
+                                          "maxHeight": OH, "everyNthFrame": 1})
+        page.wait_for_timeout(300)
+        t0 = time.time()
+        m0 = time.monotonic()
         for (text, actions), dur in zip(SEGMENTS, durations):
-            start = time.monotonic() - t0
+            start = time.monotonic() - m0
             starts.append(start)
             for a in actions:
                 run(page, a)
-            left = dur + GAP - (time.monotonic() - t0 - start)
+            left = dur + GAP - (time.monotonic() - m0 - start)
             if left > 0:
                 page.wait_for_timeout(int(left * 1000))
-        total = time.monotonic() - t0 + 0.5
         page.wait_for_timeout(500)
-        video = Path(page.video.path())
+        total = time.monotonic() - m0
+        cdp.send("Page.stopScreencast")
         ctx.close()
         browser.close()
-    return starts, total, video
+    # frame list for ffmpeg's concat demuxer: each frame lasts until the next one arrives
+    frames.sort()
+    times = [max(0.0, ts - t0) for ts, _ in frames]
+    lines = []
+    for i, (_, f) in enumerate(frames):
+        if i == 0 and times[0] > 0:
+            times[0] = 0.0
+        end = times[i + 1] if i + 1 < len(frames) else total
+        if end - times[i] <= 0:
+            continue
+        lines += [f"file '{f.as_posix()}'", f"duration {end - times[i]:.4f}"]
+    lines.append(f"file '{frames[-1][1].as_posix()}'")
+    (OUT / "frames.txt").write_text("\n".join(lines))
+    print(f"captured {len(frames)} frames")
+    return starts, total, OUT / "frames.txt"
 
 
-def assemble(starts, total, video):
+def assemble(starts, total, frame_list):
     inputs, filters = [], []
     for i, s in enumerate(starts):
         inputs += ["-i", str(OUT / f"seg{i}.mp3")]
         filters.append(f"[{i + 1}:a]adelay={int(s * 1000)}|{int(s * 1000)}[a{i}]")
     mix = "".join(f"[a{i}]" for i in range(len(starts)))
     filters.append(f"{mix}amix=inputs={len(starts)}:normalize=0[aout]")
+    filters.append(f"[0:v]scale={OW}:{OH}:flags=lanczos:in_range=pc:out_range=tv,fps=30,format=yuv420p[vout]")
     out = HERE / "demo.mp4"
-    subprocess.run([FFMPEG, "-y", "-i", str(video), *inputs, "-filter_complex", ";".join(filters),
-                    "-map", "0:v", "-map", "[aout]", "-t", f"{total:.2f}", "-c:v", "libx264", "-preset", "medium",
-                    "-crf", "20", "-pix_fmt", "yuv420p", "-r", "25", "-c:a", "aac", "-b:a", "160k", str(out)],
+    subprocess.run([FFMPEG, "-y", "-f", "concat", "-safe", "0", "-i", str(frame_list), *inputs,
+                    "-filter_complex", ";".join(filters), "-map", "[vout]", "-map", "[aout]",
+                    "-t", f"{total:.2f}", "-c:v", "libx264", "-preset", "slow", "-crf", "16", "-tune", "stillimage",
+                    "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-movflags", "+faststart", str(out)],
                    check=True, capture_output=True)
-    print(f"wrote {out} ({total:.1f} s)")
+    print(f"wrote {out} ({total:.1f} s, {OW}x{OH})")
 
 
 if __name__ == "__main__":
     asyncio.run(tts_all())
     durs = [MP3(OUT / f"seg{i}.mp3").info.length for i in range(len(SEGMENTS))]
     print("narration:", [round(d, 1) for d in durs], "total incl. gaps", round(sum(durs) + GAP * len(durs), 1), "s")
-    starts, total, video = record(durs)
-    assemble(starts, total, video)
+    starts, total, frame_list = record(durs)
+    assemble(starts, total, frame_list)
